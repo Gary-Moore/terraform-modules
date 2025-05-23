@@ -5,9 +5,6 @@ on:
     paths:
       - '**/*.tf'
       - '**/README.md'
-  pull_request:
-    paths:
-      - '**/*.tf'
 
 jobs:
   docs:
@@ -34,9 +31,7 @@ jobs:
               --output-mode inject
           done
 
-
       - name: Commit updated docs
-        if: github.event_name == 'push'
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "docs(terraform): auto-generate module documentation"
