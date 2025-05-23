@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - '**/*.tf'
-      - '**/*.md'
+      - '**/README.md'
   pull_request:
     paths:
       - '**/*.tf'
@@ -22,4 +22,21 @@ jobs:
         with:
           output-file: README.md
           output-method: inject
-          git-push: true
+          git-push: false
+
+      - name: Generate docs in each module folder
+        shell: bash
+        run: |
+          for dir in $(find . -type f -name "main.tf" -exec dirname {} \;); do
+            echo "📄 Generating docs in $dir"
+            terraform-docs markdown table "$dir" \
+              --output-file README.md \
+              --output-mode inject
+          done
+
+      - name: Commit updated docs
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "docs(terraform): auto-generate module documentation"
+          commit_user_name: terraform-docs[bot]
+          commit_user_email: terraform-docs@users.noreply.github.com
