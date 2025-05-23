@@ -1,4 +1,4 @@
-name: Generate Terraform Docs
+name: Generate Terraform Docs for All Modules
 
 on:
   push:
@@ -17,12 +17,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup terraform-docs
-        uses: terraform-docs/gh-actions@v1.1.0
-        with:
-          output-file: README.md
-          output-method: inject
-          git-push: false
+      - name: Install terraform-docs
+        run: |
+          curl -sSLo terraform-docs.tar.gz https://github.com/terraform-docs/terraform-docs/releases/download/v0.17.0/terraform-docs-v0.17.0-linux-amd64.tar.gz
+          tar -xzf terraform-docs.tar.gz
+          chmod +x terraform-docs
+          sudo mv terraform-docs /usr/local/bin/
 
       - name: Generate docs in each module folder
         shell: bash
