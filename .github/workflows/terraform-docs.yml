@@ -27,7 +27,7 @@ jobs:
       - name: Generate docs in each module folder
         shell: bash
         run: |
-          for dir in $(find . -type f -name "main.tf" -exec dirname {} \; | grep -vE "^./$"); do
+          for dir in $(find . -mindepth 2 -maxdepth 2 -type f -name "main.tf" -exec dirname {} \;); do
             echo "📄 Generating docs in $dir"
             terraform-docs markdown table "$dir" \
               --output-file README.md \
