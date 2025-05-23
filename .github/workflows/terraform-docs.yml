@@ -27,12 +27,13 @@ jobs:
       - name: Generate docs in each module folder
         shell: bash
         run: |
-          for dir in $(find . -type f -name "main.tf" -exec dirname {} \;); do
+          for dir in $(find . -type f -name "main.tf" -exec dirname {} \; | grep -vE "^./$"); do
             echo "📄 Generating docs in $dir"
             terraform-docs markdown table "$dir" \
               --output-file README.md \
               --output-mode inject
           done
+
 
       - name: Commit updated docs
         uses: stefanzweifel/git-auto-commit-action@v5
