@@ -1,0 +1,25 @@
+name: Generate Terraform Docs
+
+on:
+  push:
+    paths:
+      - '**/*.tf'
+      - '**/*.md'
+  pull_request:
+    paths:
+      - '**/*.tf'
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup terraform-docs
+        uses: terraform-docs/gh-actions@v1.1.0
+        with:
+          output-file: README.md
+          output-method: inject
+          git-push: true
